@@ -53,8 +53,10 @@ class Gridmap < Array
 			when 0
 				img_key = :block
 			when 1
-				img_key = :straight
-				tile.angle = 90 if tile.connections[1] || tile.connections[3]
+				img_key = :buffer
+				for n in 0..3
+					tile.angle = 180 + 90 * n if tile.connections[n] == true
+				end
 			when 2
 				if tile.connections == [true, false, true, false]
 					img_key = :straight
