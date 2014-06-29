@@ -91,15 +91,21 @@ class Controller < Gosu::Window
 				connections[3] = check.call(x - 1, y) #left
 				tile.connections = connections
 
-				case connections.count(true)
-				when 1
-					orientation = :straight
-				when 2
-					orientation = :corner
-				when 3
-					orientation = :tri
-				when 4
-					orientation = :quad
+				if tile.details[:connected]
+					case connections.count(true)
+					when 1
+						orientation = :straight
+					when 2
+						if connections == [true, false, true, false] || connections == [false, true, false, true]
+							orientation = :straight
+						else
+							orientation = :corner
+						end
+					when 3
+						orientation = :tri
+					when 4
+						orientation = :quad
+					end
 				else
 					orientation = :background
 				end
