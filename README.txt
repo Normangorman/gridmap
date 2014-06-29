@@ -38,6 +38,7 @@ Tiles can also be :orientated - meaning they are not connected but their angle c
 
 image_path = "assets/images/"
 		images = {
+			buffer: 	image_path + 'background.bmp', #The buffer and block types are unused for this project. They could be left out of the hash.
 			block: 		image_path + 'background.bmp', 
 			straight: 	image_path + 'straight_road.bmp',
 			corner: 	image_path + 'corner_junction.bmp',
@@ -49,7 +50,7 @@ image_path = "assets/images/"
 			background: image_path + 'background.bmp'
 		}
 
-If you plan to use connected tiles, you MUST include the block, straight, corner, tri and quad keys in this hash.
+If you plan to use connected tiles, you should include the buffer, block, straight, corner, tri and quad keys in this hash.
 They will be used to draw the 5 possible types of connected tile.
 Any other keys included should correspond to the :type parameter you set for each symbol in the symbols hash.
 
