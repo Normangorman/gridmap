@@ -132,8 +132,8 @@ class Gridmap < Array
 end
 
 class Tile
-	attr_reader :x, :y
-	attr_accessor :angle, :centre_point, :connections, :details, :image, :z
+	attr_reader :x, :y, :centre_point
+	attr_accessor :angle, :connections, :details, :image, :z
 	def initialize(x, y, size, details)
 		@x, @y, @size, @details = x, y, size, details
 		
@@ -196,8 +196,6 @@ class GameWindow < Gosu::Window
 		super(@grid.pixel_width, @grid.pixel_height, fullscreen = false)
 		@grid.define_tiles(self, images)
 	end
-
-	
 
 	def update
 	end

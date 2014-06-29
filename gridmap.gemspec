@@ -6,6 +6,7 @@ Gem::Specification.new do |s|
   s.description = "Gridmap makes tile based maps easy. It offers 2 new classes - a gridmap and a tile. It takes care of drawing tiles with connected textures (e.g. walls)."
   s.authors     = "Normangorman"
   s.files       = ["lib/gridmap.rb"]
+  s.homepage    = "https://github.com/Normangorman/gridmap"
   s.email       = '8076bgorman@gmail.com'
   s.license       = 'MIT'
 end
