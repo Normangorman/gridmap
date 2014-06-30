@@ -149,10 +149,14 @@ class Gridmap < Array
 	def change_level(new_map, *p)
 		puts "changing level"
 		#Clears the current grid
-		self.count.times do
-			self.pop
-		end
+		self.count.times { self.pop }
+
 		@map_path = new_map
+		#Replaces instance variables with param variables if they exist.
+		@symbol_details = p[0] if p[0]
+		@images 		= p[1] if p[1]
+		@tile_size		= p[2] if p[2]
+
 		make_map
   		define_tiles
 	end
