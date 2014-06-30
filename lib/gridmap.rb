@@ -163,10 +163,12 @@ class Gridmap < Array
 end
 
 class Tile
-	attr_reader :x, :y
-	attr_accessor :angle, :centre_point, :connections, :details, :image, :z
+	attr_reader :x, :y, :pixel_x, :pixel_y, :centre_point
+	attr_accessor :angle, :details, :image, :z, :connections
 	def initialize(x, y, size, details)
 		@x, @y, @size, @details = x, y, size, details
+		@pixel_x 	= @x * size
+		@pixel_y 	= @y * size
 		
 		@offset_x 	= details[:offset_x] if details[:offset_x]
 		@offset_y 	= details[:offset_y] if details[:offset_y]
