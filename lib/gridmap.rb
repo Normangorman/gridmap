@@ -1,14 +1,25 @@
+require 'gosu' 
+
 class Gridmap < Array
 	attr_reader :tile_size, :grid_width, :grid_height, :pixel_width, :pixel_height, :connected_tiles, :orientated_tiles
-  	def initialize(map_path, symbol_details, tile_size)
-  		@tile_size = tile_size
-  		@connected_tiles = []
-  		@orientated_tiles = []
+  	def initialize(window, map_path, symbol_details, images, tile_size)
+  		@window 			= window
+  		@map_path 			= map_path
+  		@symbol_details		= symbol_details
+  		@images 			= images
+  		@tile_size 			= tile_size
 
-	   	IO.readlines(map_path).each_with_index do |line, y|
+  		make_map
+  		define_tiles
+	end
+
+	def make_map
+		@connected_tiles 	= []
+  		@orientated_tiles 	= []
+		IO.readlines(@map_path).each_with_index do |line, y|
 	      	gridline = []
 	      	line.chomp.split("").each_with_index do |symbol, x|
-	      		t = Tile.new(x, y, tile_size, symbol_details[symbol])
+	      		t = Tile.new(x, y, @tile_size, @symbol_details[symbol])
 	      		gridline 			<< t
 	      		@connected_tiles 	<< t if t.details[:connected]
 	      		@orientated_tiles 	<< t if t.details[:orientated]
@@ -16,15 +27,20 @@ class Gridmap < Array
 	      	self << gridline
 	    end
 
+	    #Checks to make sure all lines are the same length.
+	    line_count = self.first.count
+	    self.each {|line| if line.count != line_count
+	    						raise StandardError, "The lines in your map file are not all the same length." end}
+
 	    #Since all lines should contain the same number of characters, the width is set by counting the number of characters in the first line.
 		@grid_width  = self.first.count - 1
 		@grid_height = self.count - 1
 
-		@pixel_width = (@grid_width + 1) * tile_size
-		@pixel_height = (@grid_height + 1) * tile_size
+		@pixel_width = (@grid_width + 1) * @tile_size
+		@pixel_height = (@grid_height + 1) * @tile_size
 	end
 
-	def define_tiles(window, images)
+	def define_tiles
 		#The check method checks a tile with the given grid co-ordinates to see if it is connected or not.
 		#The logic here prevents a tile from being checked if it lies outside the grid.
 		def check(x, y)
@@ -85,7 +101,7 @@ class Gridmap < Array
 				img_key = :quad
 			end
 
-			tile.image = Gosu::Image.new(window, images[img_key], true)
+			tile.image = Gosu::Image.new(@window, @images[img_key], true)
 		end
 
 		angle_orientated_tiles
@@ -96,7 +112,7 @@ class Gridmap < Array
 				unless tile.details[:connected]
 					#img_key is inferred from the tile's type!
 					img_key = tile.details[:type].to_sym
-					tile.image = Gosu::Image.new(window, images[img_key], true)
+					tile.image = Gosu::Image.new(@window, @images[img_key], true)
 				end
 			end
 		end
@@ -128,6 +144,17 @@ class Gridmap < Array
 
 	def find_tile(x, y)
 		self[(y / @tile_size).floor][(x / @tile_size).floor]
+	end
+
+	def change_level(new_map, *p)
+		puts "changing level"
+		#Clears the current grid
+		self.count.times do
+			self.pop
+		end
+		@map_path = new_map
+		make_map
+  		define_tiles
 	end
 end
 
