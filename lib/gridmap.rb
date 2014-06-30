@@ -101,6 +101,9 @@ class Gridmap < Array
 				img_key = :quad
 			end
 
+			if @images[img_key] == nil
+				raise StandardError, "Oops, an image was not found for the key: #{img_key}."
+			end
 			tile.image = Gosu::Image.new(@window, @images[img_key], true)
 		end
 

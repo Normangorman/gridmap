@@ -54,16 +54,23 @@ If you plan to use connected tiles, you should include the buffer, block, straig
 They will be used to draw the 5 possible types of connected tile.
 Any other keys included should correspond to the :type parameter you set for each symbol in the symbols hash.
 
-4. Initialize a new gridmap, passing it the path to your map file, the symbols hash, and the size in pixels of your tiles. E.g:
-@grid = Gridmap.new("assets/roadmap.txt", symbol_details, 30)
+4. Initialize a new gridmap, passing it the window, the path to your map, the symbols and image details hashes, then the size in pixels of your tiles.
+@grid = Gridmap.new(self, "assets/roadmap.txt", symbol_details, images, 30)
 
-5. Call the define_tiles method on this grid, passing it the window itself, and the images hash. This does several things:
+Initializing a new grid calls two methods, make_grid and define_tiles.
+ - make_grid adds all the tiles defined in your map file to the grid.
+
+define_tiles does several things:
  - For each tile in the grid, it calculates which tiles adjacent to the tile are 'connected'. It saves this to the tile as an instance variable called connections. Connections is an array of the form [boolean, boolean, boolean, boolean] - in which each element refers to a specific direction, beginning above the tile and moving clockwise.
- - Every connected tile is assigned it's image and angle based on it's connections.
+ - Every connected tile is assigned its image and angle based on its connections.
  - The angle_orientated_tiles method is called to set the angle of all orientated tiles (by default they are orientated towards the nearest clockwise 'connected' tile).
  - All non-connected tiles have their image set according to the images hash.
 
 e.g: @grid.define_tiles(self, images)
 6. In the game window's draw method, call draw tiles on your gridmap to draw all the tiles.
+
+7. Use the useful methods provided by gridmap!
+ - find_tile(x, y) returns the tile object with the given x, y co-ordinates (in pixels, not grid co-ordinates).
+ - change_level(new_map, *p) will clear the grid and the reload it from a different map path which you specify with the new_map parameter. As optional parameters you can also pass a new symbol details hash, a new images hash, and a new tile size.
 
 Check out the example project to see a working example.
